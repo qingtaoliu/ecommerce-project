@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品详情 - 优品商城</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #F5F5F5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* 头部导航 */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1677FF;
+        }
+        
+        .search-bar {
+            display: flex;
+            width: 50%;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #1677FF;
+            border-right: none;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+        }
+        
+        .search-bar button {
+            background-color: #1677FF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .user-actions a {
+            color: #666;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .user-actions a:hover {
+            color: #1677FF;
+        }
+        
+        .nav-categories {
+            display: flex;
+            gap: 30px;
+            padding: 15px 0;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-categories a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .nav-categories a:hover {
+            color: #1677FF;
+        }
+        
+        /* 面包屑导航 */
+        .breadcrumb {
+            padding: 15px 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .breadcrumb a {
+            color: #666;
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            color: #1677FF;
+        }
+        
+        .breadcrumb span {
+            margin: 0 5px;
+        }
+        
+        /* 商品详情区域 */
+        .product-detail {
+            display: flex;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        /* 商品图片区域 */
+        .product-gallery {
+            width: 40%;
+            padding: 20px;
+        }
+        
+        .product-main-image {
+            height: 400px;
+            overflow: hidden;
+            border: 1px solid #eee;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .product-main-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .product-thumbnails {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .product-thumbnail {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #eee;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .product-thumbnail img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .product-thumbnail.active {
+            border-color: #1677FF;
+        }
+        
+        /* 商品信息区域 */
+        .product-info {
+            width: 60%;
+            padding: 30px;
+            border-left: 1px solid #eee;
+        }
+        
+        .product-title {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+        
+        .product-brief {
+            color: #999;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .product-price-box {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .product-price-label {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .product-price {
+            color: #FA8C16;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .product-price .original {
+            color: #999;
+            font-size: 16px;
+            text-decoration: line-through;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+        
+        .product-meta {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .product-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .product-specs {
+            margin-bottom: 20px;
+        }
+        
+        .spec-group {
+            margin-bottom: 15px;
+        }
+        
+        .spec-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .spec-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .spec-option {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .spec-option:hover {
+            border-color: #1677FF;
+            color: #1677FF;
+        }
+        
+        .spec-option.active {
+            border-color: #1677FF;
+            background-color: #f0f7ff;
+            color: #1677FF;
+        }
+        
+        .product-quantity {
+            margin-bottom: 30px;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            max-width: 120px;
+        }
+        
+        .quantity-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .quantity-input {
+            width: 50px;
+            height: 36px;
+            border: 1px solid #ddd;
+            border-left: none;
+            border-right: none;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background-color: #1677FF;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: #FA8C16;
+            color: white;
+        }
+        
+        .btn-outline {
+            background-color: white;
+            border: 1px solid #ddd;
+            color: #666;
+        }
+        
+        /* 商品详情选项卡 */
+        .product-tabs {
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .tabs-header {
+            display: flex;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .tab {
+            padding: 15px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .tab.active {
+            color: #1677FF;
+            font-weight: 500;
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #1677FF;
+        }
+        
+        .tab-content {
+            padding: 30px;
+        }
+        
+        .product-description {
+            line-height: 1.8;
+        }
+        
+        .product-description img {
+            max-width: 100%;
+            margin: 20px 0;
+        }
+        
+        .product-params {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .product-params tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+        
+        .product-params th, .product-params td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .product-params th {
+            width: 20%;
+            color: #666;
+            font-weight: normal;
+        }
+        
+        /* 评价区域 */
+        .review-stats {
+            display: flex;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .review-summary {
+            width: 200px;
+            text-align: center;
+            padding-right: 20px;
+            border-right: 1px solid #eee;
+        }
+        
+        .review-score {
+            font-size: 36px;
+            color: #FA8C16;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .review-stars {
+            color: #FA8C16;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .review-count {
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .review-breakdown {
+            flex: 1;
+            padding-left: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .review-type {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .review-type-label {
+            width: 60px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .review-progress {
+            flex: 1;
+            height: 8px;
+            background-color: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0 15px;
+        }
+        
+        .review-progress-bar {
+            height: 100%;
+            background-color: #FA8C16;
+        }
+        
+        .review-type-count {
+            width: 50px;
+            font-size: 14px;
+            color: #999;
+            text-align: right;
+        }
+        
+        .review-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .review-filter {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .review-filter:hover {
+            border-color: #1677FF;
+            color: #1677FF;
+        }
+        
+        .review-filter.active {
+            background-color: #1677FF;
+            color: white;
+            border-color: #1677FF;
+        }
+        
+        .review-list {
+            margin-bottom: 20px;
+        }
+        
+        .review-item {
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .reviewer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f0f7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1677FF;
+            font-weight: 500;
+        }
+        
+        .reviewer-name {
+            font-weight: 500;
+        }
+        
+        .review-date {
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .review-rating {
+            color: #FA8C16;
+        }
+        
+        .review-content {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .review-photos {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .review-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .review-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .review-specs {
+            font-size: 14px;
+            color: #999;
+        }
+        
+        /* 底部 */
+        footer {
+            background-color: #fff;
+            padding: 40px 0;
+            margin-top: 50px;
+            border-top: 1px solid #eee;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column ul li a {
+            color: #666;
+            text-decoration: none;
+        }
+        
+        .footer-column ul li a:hover {
+            color: #1677FF;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部导航 -->
+    <header>
+        <div class="container">
+            <div class="header-top">
+                <div class="logo">优品商城</div>
+                <div class="search-bar">
+                    <input type="text" placeholder="搜索商品...">
+                    <button>搜索</button>
+                </div>
+                <div class="user-actions">
+                    <a href="pc-cart.html">
+                        <span class="icon">🛒</span>
+                        <span>购物车</span>
+                    </a>
+                    <a href="pc-user-center.html">
+                        <span class="icon">👤</span>
+                        <span>我的账户</span>
+                    </a>
+                </div>
+            </div>
+            <nav class="nav-categories">
+                <a href="pc-mall.html">首页</a>
+                <a href="#">手机数码</a>
+                <a href="#">家用电器</a>
+                <a href="#">电脑办公</a>
+                <a href="#">服装鞋包</a>
+                <a href="#">食品生鲜</a>
+                <a href="#">美妆护肤</a>
+                <a href="#">家居家装</a>
+                <a href="#">运动户外</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <a href="pc-mall.html">首页</a>
+            <span>></span>
+            <a href="#">手机数码</a>
+            <span>></span>
+            <a href="#">智能手机</a>
+            <span>></span>
+            <span>2023新款智能手机 全网通5G 超长续航</span>
+        </div>
+        
+        <!-- 商品详情区域 -->
+        <div class="product-detail">
+            <!-- 商品图片区域 -->
+            <div class="product-gallery">
+                <div class="product-main-image">
+                    <img src="https://img.alicdn.com/imgextra/i3/6000000004304/O1CN01Nt9oXL1hIkCSjELQu_!!6000000004254-0-octopus.jpg" alt="商品主图">
+                </div>
+                <div class="product-thumbnails">
+                    <div class="product-thumbnail active">
+                        <img src="https://img.alicdn.com/imgextra/i3/6000000004304/O1CN01Nt9oXL1hIkCSjELQu_!!6000000004254-0-octopus.jpg" alt="缩略图1">
+                    </div>
+                    <div class="product-thumbnail">
+                        <img src="https://img.alicdn.com/imgextra/i4/6000000007150/O1CN01YmgJYK23UDEUoUHPZ_!!6000000007150-0-octopus.jpg" alt="缩略图2">
+                    </div>
+                    <div class="product-thumbnail">
+                        <img src="https://img.alicdn.com/imgextra/i1/6000000000631/O1CN01FQwzHj1HVLLUUkFPe_!!6000000000631-0-octopus.jpg" alt="缩略图3">
+                    </div>
+                    <div class="product-thumbnail">
+                        <img src="https://img.alicdn.com/imgextra/i3/6000000002414/O1CN01DHvj1S1TLseGFGTyx_!!6000000002364-0-octopus.jpg" alt="缩略图4">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 商品信息区域 -->
+            <div class="product-info">
+                <h1 class="product-title">2023新款智能手机 全网通5G 超长续航</h1>
+                <p class="product-brief">高通骁龙8处理器 | 6.7英寸AMOLED屏幕 | 5000mAh大电池 | 6400万像素四摄</p>
+                
+                <div class="product-price-box">
+                    <div class="product-price-label">优品价</div>
+                    <div class="product-price">
+                        ¥1999.00
+                        <span class="original">¥2399.00</span>
+                    </div>
+                </div>
+                
+                <div class="product-meta">
+                    <div class="product-meta-item">
+                        <span>销量:</span>
+                        <span>12,345件</span>
+                    </div>
+                    <div class="product-meta-item">
+                        <span>评价:</span>
+                        <span>2,300+</span>
+                    </div>
+                    <div class="product-meta-item">
+                        <span>库存:</span>
+                        <span>充足</span>
+                    </div>
+                </div>
+                
+                <div class="product-specs">
+                    <div class="spec-group">
+                        <div class="spec-title">颜色</div>
+                        <div class="spec-options">
+                            <div class="spec-option active">星空黑</div>
+                            <div class="spec-option">极光蓝</div>
+                            <div class="spec-option">珊瑚粉</div>
+                            <div class="spec-option">翡翠绿</div>
+                        </div>
+                    </div>
+                    
+                    <div class="spec-group">
+                        <div class="spec-title">版本</div>
+                        <div class="spec-options">
+                            <div class="spec-option active">8GB+128GB</div>
+                            <div class="spec-option">8GB+256GB</div>
+                            <div class="spec-option">12GB+256GB</div>
+                            <div class="spec-option">12GB+512GB</div>
+                        </div>
+                    </div>
+                    
+                    <div class="spec-group">
+                        <div class="spec-title">套餐</div>
+                        <div class="spec-options">
+                            <div class="spec-option active">官方标配</div>
+                            <div class="spec-option">超值套餐（含保护壳+钢化膜）</div>
+                            <div class="spec-option">豪华套餐（含保护壳+钢化膜+充电器）</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-quantity">
+                    <div class="spec-title">数量</div>
+                    <div class="quantity-control">
+                        <div class="quantity-btn">-</div>
+                        <input type="text" class="quantity-input" value="1">
+                        <div class="quantity-btn">+</div>
+                    </div>
+                </div>
+                
+                <div class="product-actions">
+                    <button class="btn btn-primary">立即购买</button>
+                    <button class="btn btn-secondary">加入购物车</button>
+                    <button class="btn btn-outline">❤ 收藏</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 商品详情选项卡 -->
+        <div class="product-tabs">
+            <div class="tabs-header">
+                <div class="tab active">商品详情</div>
+                <div class="tab">规格参数</div>
+                <div class="tab">用户评价(2300+)</div>
+            </div>
+            
+            <div class="tab-content">
+                <div class="product-description">
+                    <h3>产品介绍</h3>
+                    <p>这款2023新款智能手机采用了最新的高通骁龙8处理器，搭配高达12GB的大内存，为用户带来极致流畅的操作体验。6.7英寸的AMOLED屏幕支持120Hz高刷新率，色彩鲜艳，显示效果出色。</p>
+                    
+                    <img src="https://img.alicdn.com/imgextra/i3/6000000004304/O1CN01Nt9oXL1hIkCSjELQu_!!6000000004254-0-octopus.jpg" alt="产品详情图">
+                    
+                    <h3>相机系统</h3>
+                    <p>后置6400万像素四摄系统，包括主摄、超广角、微距和深度摄像头，满足各种拍摄场景需求。前置3200万像素自拍相机，支持AI美颜，让自拍更加出色。</p>
+                    
+                    <h3>电池与充电</h3>
+                    <p>内置5000mAh大容量电池，支持一天重度使用。配备65W超级快充，30分钟即可充电至80%，让您告别电量焦虑。</p>
+                    
+                    <h3>系统与安全</h3>
+                    <p>搭载最新Android系统，提供流畅稳定的使用体验。支持屏下指纹识别和面部解锁，安全便捷。</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 底部 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>购物指南</h3>
+                    <ul>
+                        <li><a href="#">购物流程</a></li>
+                        <li><a href="#">会员介绍</a></li>
+                        <li><a href="#">常见问题</a></li>
+                        <li><a href="#">联系客服</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>配送方式</h3>
+                    <ul>
+                        <li><a href="#">上门自提</a></li>
+                        <li><a href="#">211限时达</a></li>
+                        <li><a href="#">配送服务查询</a></li>
+                        <li><a href="#">配送费收取标准</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>支付方式</h3>
+                    <ul>
+                        <li><a href="#">货到付款</a></li>
+                        <li><a href="#">在线支付</a></li>
+                        <li><a href="#">分期付款</a></li>
+                        <li><a href="#">公司转账</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>售后服务</h3>
+                    <ul>
+                        <li><a href="#">售后政策</a></li>
+                        <li><a href="#">价格保护</a></li>
+                        <li><a href="#">退款说明</a></li>
+                        <li><a href="#">返修/退换货</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2025 优品商城 版权所有
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

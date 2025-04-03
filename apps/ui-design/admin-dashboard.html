@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电商平台 - 后台管理系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #F0F2F5;
+            color: #333;
+        }
+        
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* 侧边栏 */
+        .sidebar {
+            width: 220px;
+            background-color: #001529;
+            color: rgba(255, 255, 255, 0.65);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 100;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+        }
+        
+        .logo {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            padding-left: 24px;
+            background-color: #002140;
+        }
+        
+        .logo-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .menu {
+            padding: 16px 0;
+        }
+        
+        .menu-item {
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .menu-item:hover {
+            color: white;
+        }
+        
+        .menu-item.active {
+            color: white;
+            background-color: #1677FF;
+        }
+        
+        .menu-icon {
+            font-size: 16px;
+        }
+        
+        .menu-title {
+            font-size: 14px;
+        }
+        
+        .submenu {
+            padding-left: 48px;
+            font-size: 13px;
+        }
+        
+        .submenu-item {
+            padding: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .submenu-item:hover {
+            color: white;
+        }
+        
+        .submenu-item.active {
+            color: #1677FF;
+        }
+        
+        /* 主内容区 */
+        .main-content {
+            flex: 1;
+            margin-left: 220px;
+        }
+        
+        /* 头部 */
+        .header {
+            height: 64px;
+            background-color: white;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .toggle-sidebar {
+            font-size: 18px;
+            margin-right: 24px;
+            cursor: pointer;
+        }
+        
+        .breadcrumb {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .header-icon {
+            font-size: 16px;
+            color: #666;
+            cursor: pointer;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #1677FF;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+        }
+        
+        .username {
+            font-size: 14px;
+        }
+        
+        /* 内容区 */
+        .content {
+            padding: 24px;
+        }
+        
+        .page-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+        
+        /* 卡片组件 */
+        .card {
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+        }
+        
+        .card-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-title {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .card-extra {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .card-body {
+            padding: 24px;
+        }
+        
+        /* 统计卡片 */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            padding: 24px;
+        }
+        
+        .stat-title {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .stat-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #999;
+        }
+        
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .trend-up {
+            color: #52c41a;
+        }
+        
+        .trend-down {
+            color: #f5222d;
+        }
+        
+        /* 图表区域 */
+        .chart-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .chart-placeholder {
+            height: 300px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        /* 表格 */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .table th, .table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .table th {
+            background-color: #fafafa;
+            font-weight: 500;
+            color: #666;
+        }
+        
+        .table tr:hover {
+            background-color: #fafafa;
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .table-action {
+            color: #1677FF;
+            cursor: pointer;
+        }
+        
+        .table-action.delete {
+            color: #f5222d;
+        }
+        
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 16px;
+        }
+        
+        .page-item {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d9d9d9;
+            margin-right: 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .page-item:hover {
+            border-color: #1677FF;
+            color: #1677FF;
+        }
+        
+        .page-item.active {
+            background-color: #1677FF;
+            border-color: #1677FF;
+            color: white;
+        }
+        
+        /* 表单 */
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .form-control {
+            width: 100%;
+            height: 32px;
+            padding: 4px 11px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: #1677FF;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+        
+        .form-select {
+            width: 100%;
+            height: 32px;
+            padding: 4px 11px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: white;
+        }
+        
+        .form-textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 4px 11px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            resize: vertical;
+        }
+        
+        /* 按钮 */
+        .btn {
+            padding: 0 15px;
+            height: 32px;
+            border-radius: 4px;
+            border: 1px solid #d9d9d9;
+            background-color: white;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: #1677FF;
+            border-color: #1677FF;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #4096ff;
+            border-color: #4096ff;
+        }
+        
+        .btn-danger {
+            background-color: #f5222d;
+            border-color: #f5222d;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #ff4d4f;
+            border-color: #ff4d4f;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-text">优品商城管理系统</div>
+            </div>
+            <div class="menu">
+                <div class="menu-item active">
+                    <span class="menu-icon">📊</span>
+                    <span class="menu-title">仪表盘</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">🛍️</span>
+                    <span class="menu-title">商品管理</span>
+                </div>
+                <div class="submenu">
+                    <div class="submenu-item">商品列表</div>
+                    <div class="submenu-item">添加商品</div>
+                    <div class="submenu-item">商品分类</div>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">📦</span>
+                    <span class="menu-title">订单管理</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">👥</span>
+                    <span class="menu-title">用户管理</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">🔄</span>
+                    <span class="menu-title">营销管理</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">📈</span>
+                    <span class="menu-title">数据统计</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">⚙️</span>
+                    <span class="menu-title">系统设置</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 头部 -->
+            <div class="header">
+                <div class="header-left">
+                    <div class="toggle-sidebar">☰</div>
+                    <div class="breadcrumb">首页 / 仪表盘</div>
+                </div>
+                <div class="header-right">
+                    <div class="header-icon">🔔</div>
+                    <div class="header-icon">📧</div>
+                    <div class="user-info">
+                        <div class="avatar">A</div>
+                        <div class="username">Admin</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 内容区 -->
+            <div class="content">
+                <h1 class="page-title">仪表盘</h1>
+                
+                <!-- 统计卡片 -->
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-title">总销售额</div>
+                        <div class="stat-value">¥126,560</div>
+                        <div class="stat-footer">
+                            <div class="stat-trend trend-up">↑ 12% 同比增长</div>
+                            <div>周同比</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">订单量</div>
+                        <div class="stat-value">1,568</div>
+                        <div class="stat-footer">
+                            <div class="stat-trend trend-up">↑ 8% 同比增长</div>
+                            <div>日同比</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">新增用户</div>
+                        <div class="stat-value">12,856</div>
+                        <div class="stat-footer">
+                            <div class="stat-trend trend-down">↓ 2% 同比下降</div>
+                            <div>月同比</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">客单价</div>
+                        <div class="stat-value">¥98.5</div>
+                        <div class="stat-footer">
+                            <div class="stat-trend trend-up">↑ 5% 同比增长</div>
+                            <div>周同比</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 图表区域 -->
+                <div class="chart-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">销售趋势</div>
+                            <div class="card-extra">
+                                <span>今日</span>
+                                <span>本周</span>
+                                <span>本月</span>
+                                <span>本年</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-placeholder">销售趋势图表</div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">销售分布</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-placeholder">销售分布图表</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 最新订单 -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">最新订单</div>
+                        <div class="card-extra">
+                            <button class="btn">刷新</button>
+                            <button class="btn">导出</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>订单编号</th>
+                                    <th>用户</th>
+                                    <th>商品</th>
+                                    <th>金额</th>
+                                    <th>状态</th>
+                                    <th>下单时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ORD20250325001</td>
+                                    <td>张三</td>
+                                    <td>智能手机 全网通5G</td>
+                                    <td>¥1999.00</td>
+                                    <td>待发货</td>
+                                    <td>2025-03-25 08:30:12</td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <span class="table-action">查看</span>
+                                            <span class="table-action">编辑</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>ORD20250325002</td>
+                                    <td>李四</td>
+                                    <td>轻薄笔记本电脑</td>
+                                    <td>¥4599.00</td>
+                                    <td>已付款</td>
+                                    <td>2025-03-25 09:15:36</td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <span class="table-action">查看</span>
+                                            <span class="table-action">编辑</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>ORD20250324098</td>
+                                    <td>王五</td>
+                                    <td>真无线蓝牙耳机</td>
+                                    <td>¥299.00</td>
+                                    <td>已发货</td>
+                                    <td>2025-03-24 18:42:51</td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <span class="table-action">查看</span>
+                                            <span class="table-action">编辑</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>ORD20250324097</td>
+                                    <td>赵六</td>
+                                    <td>智能手表 健康监测</td>
+                                    <td>¥599.00</td>
+                                    <td>已完成</td>
+                                    <td>2025-03-24 16:20:05</td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <span class="table-action">查看</span>
+                                            <span class="table-action">编辑</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>ORD20250324096</td>
+                                    <td>孙七</td>
+                                    <td>高端智能扫地机器人</td>
+                                    <td>¥2399.00</td>
+                                    <td>已完成</td>
+                                    <td>2025-03-24 15:08:22</td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <span class="table-action">查看</span>
+                                            <span class="table-action">编辑</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="pagination">
+                            <div class="page-item">«</div>
+                            <div class="page-item active">1</div>
+                            <div class="page-item">2</div>
+                            <div class="page-item">3</div>
+                            <div class="page-item">4</div>
+                            <div class="page-item">5</div>
+                            <div class="page-item">»</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 商品管理 -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">商品管理</div>
+                        <div class="card-extra">
+                            <button class="btn btn-primary">添加商品</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label">商品名称</label>
+                            <input type="text" class="form-control" placeholder="请输入商品名称">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">商品分类</label>
+                            <select class="form-select">
+                                <option>请选择分类</option>
+                                <option>手机数码</option>
+                                <option>电脑办公</option>
+                                <option>服装鞋包</option>
+                                <option>食品生鲜</option>
+                                <option>家居家装</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">商品价格</label>
+                            <input type="text" class="form-control" placeholder="请输入商品价格">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">商品库存</label>
+                            <input type="text" class="form-control" placeholder="请输入商品库存">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">商品描述</label>
+                            <textarea class="form-textarea" placeholder="请输入商品描述"></textarea>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-primary">保存</button>
+                            <button class="btn">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

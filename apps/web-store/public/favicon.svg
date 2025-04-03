@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 购物袋形状 -->
+  <path 
+    d="M8 6L5 12V26C5 26.7956 5.31607 27.5587 5.87868 28.1213C6.44129 28.6839 7.20435 29 8 29H24C24.7956 29 25.5587 28.6839 26.1213 28.1213C26.6839 27.5587 27 26.7956 27 26V12L24 6H8Z" 
+    fill="#1677FF" 
+    stroke="#1677FF" 
+    stroke-width="2" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+  />
+  
+  <!-- 购物袋提手 -->
+  <path 
+    d="M5 12H27" 
+    stroke="white" 
+    stroke-width="2" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+  />
+  
+  <!-- 购物袋提手 -->
+  <path 
+    d="M21 12C21 13.5913 20.3679 15.1174 19.2426 16.2426C18.1174 17.3679 16.5913 18 15 18C13.4087 18 11.8826 17.3679 10.7574 16.2426C9.63214 15.1174 9 13.5913 9 12" 
+    stroke="white" 
+    stroke-width="2" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+  />
+  
+  <!-- 优字 -->
+  <text 
+    x="16" 
+    y="23" 
+    font-family="Arial, sans-serif" 
+    font-size="10" 
+    font-weight="bold" 
+    fill="white" 
+    text-anchor="middle"
+  >
+    优
+  </text>
+  
+  <!-- 闪光效果 -->
+  <circle cx="23" cy="7" r="2" fill="#FACC15" />
+</svg>
