@@ -1,84 +1,122 @@
-# Turborepo starter
+# 电商项目 (E-commerce Project)
 
-This Turborepo starter is maintained by the Turborepo core team.
+## 项目概览
 
-## Using this example
+本项目是一个全栈电商解决方案，采用微服务架构和 Monorepo 管理方式，提供完整的电商业务功能实现。
 
-Run the following command:
+### 核心功能
 
-```sh
-npx create-turbo@latest
-```
+- 多端支持：Web商城、小程序、管理后台
+- 微服务架构：基于 NestJS 的后端服务
+- UI 组件库：可复用的 React 组件系统
+- 统一规范：共享的 TypeScript 配置和 ESLint 规则
 
-## What's inside?
+## 技术栈
 
-This Turborepo includes the following packages/apps:
+### 前端技术
+- **Web框架**: Next.js 13+
+- **UI框架**: React 18
+- **小程序**: 微信小程序原生框架
+- **状态管理**: React Context + Hooks
+- **样式方案**: Tailwind CSS
 
-### Apps and Packages
+### 后端技术
+- **服务框架**: NestJS
+- **数据库**: MySQL
+- **缓存**: Redis
+- **消息队列**: RabbitMQ
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### 开发工具
+- **构建系统**: Turborepo
+- **包管理器**: pnpm
+- **开发语言**: TypeScript
+- **代码规范**: ESLint + Prettier
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+## 项目结构
 
 ```
-cd my-turborepo
-pnpm build
+├── apps/                      # 应用程序
+│   ├── backend/               # NestJS 后端服务
+│   ├── web-store/             # Next.js 商城前端
+│   ├── mini-program/          # 微信小程序
+│   ├── sql/                   # 数据库脚本
+│   └── ui-design/             # UI 设计文件
+├── packages/                  # 共享包
+│   ├── api/                   # API 类型定义
+│   ├── eslint-config/         # ESLint 配置
+│   ├── typescript-config/     # TypeScript 配置
+│   └── ui/                    # 共享 UI 组件
+└── turbo.json                 # Turborepo 配置
 ```
 
-### Develop
+## 开发指南
 
-To develop all apps and packages, run the following command:
+### 环境要求
+- Node.js 18+
+- pnpm 8+
+- MySQL 8.0+
+- Redis 6+
 
+### 本地开发
+
+1. 安装依赖
+```bash
+pnpm install
 ```
-cd my-turborepo
+
+2. 配置环境变量
+```bash
+cp apps/backend/.env.example apps/backend/.env
+# 编辑 .env 文件配置数据库等信息
+```
+
+3. 启动开发服务器
+```bash
 pnpm dev
 ```
 
-### Remote Caching
+## 缓存配置
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+项目使用 Turborepo 的远程缓存功能加速构建：
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
+```bash
+pnpm turbo login
+pnpm turbo link
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## 部署说明
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
+### 后端服务
+```bash
+cd apps/backend
+pnpm build
+pnpm start:prod
 ```
-npx turbo link
+
+### Web商城
+```bash
+cd apps/web-store
+pnpm build
+pnpm start
 ```
 
-## Useful Links
+### 小程序
+使用微信开发者工具导入 `apps/mini-program` 目录
 
-Learn more about the power of Turborepo:
+## 文档链接
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+- [后端API文档](apps/backend/README.md)
+- [Web商城文档](apps/web-store/README.md)
+- [组件库文档](packages/ui/README.md)
+
+## 贡献指南
+
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交改动 (`git commit -m 'feat: add some feature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 提交 Pull Request
+
+## 许可证
+
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
